@@ -130,9 +130,9 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
             if (max > 1.0) {
                 frontLeftPower  = frontLeftPower / max;
-                frontRightPower /= max;
-                backLeftPower   /= max;
-                backRightPower  /= max;
+                frontRightPower = frontRightPower /max;
+                backLeftPower   = backLeftPower/max;
+                backRightPower  = backRightPower/max;
             }
 
             // This is test code:
