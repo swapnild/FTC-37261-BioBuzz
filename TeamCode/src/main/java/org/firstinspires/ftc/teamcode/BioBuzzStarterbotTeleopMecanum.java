@@ -287,7 +287,11 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
          * add some power to the intake power. This can sometimes help dislodge stuck elements from
          * inside the hopper.
          */
-        if (gamepad1.right_bumper && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
+        telemetry.addData("Launcher velocity", "="+ launcher.getVelocity());
+        telemetry.addData("LAUNCHER_MIN_VELOCITY", "" + LAUNCHER_MIN_VELOCITY);
+        telemetry.addData("LAUNCHER_TARGET_VELOCITY", ""+LAUNCHER_TARGET_VELOCITY);
+        telemetry.update();
+        if (gamepad1.right_bumper /* && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY */) {
             windmillServo.setPower(1);
             intakePower += 0.5;
         } else {
