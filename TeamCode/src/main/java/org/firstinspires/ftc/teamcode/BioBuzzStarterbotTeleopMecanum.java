@@ -293,7 +293,7 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
         telemetry.update();
         if (gamepad1.right_bumper /* && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY */) {
             windmillServo.setPower(1);
-            intakePower += 0.5;
+//            intakePower += 0.5;
         } else {
             windmillServo.setPower(0);
         }
