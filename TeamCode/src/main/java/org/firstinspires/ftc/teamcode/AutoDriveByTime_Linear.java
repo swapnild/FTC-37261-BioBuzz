@@ -123,9 +123,9 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Drive forward for 3 seconds
+        // Step 1:  Drive forward for 0.5 seconds
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
             mecanumDrive(FORWARD_SPEED, 0, 0);
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
@@ -133,26 +133,17 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         //stop rolling forward
         mecanumDrive(0, 0, 0);
 
-        // Step 2:  Spin right for 1.3 seconds
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-            mecanumDrive(0, 0, TURN_SPEED );
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        mecanumDrive(0, 0, 0);
-
-        // Step 3:  Drive Backward for 1 Second
+        // Step 2:  strafe right for 0.5 Second
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 3.0)) {
-            mecanumDrive(-FORWARD_SPEED, 0, 0);
-            telemetry.addData("Path", "Leg 3: %4.1f S Elapsed", runtime.seconds());
+            mecanumDrive(0, FORWARD_SPEED, 0);
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         //stop rolling forward
         mecanumDrive(0, 0, 0);
 
-        // Step 4:  Stop
+        // Step 3:  Stop
         mecanumDrive(0, 0, 0);
 
         telemetry.addData("Path", "Complete");
