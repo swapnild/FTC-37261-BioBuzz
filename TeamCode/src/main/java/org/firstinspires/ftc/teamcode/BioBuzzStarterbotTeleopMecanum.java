@@ -75,7 +75,7 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
      */
     public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
     //Setting LAUNCHER_MIN_VELOCITY VERY LOW. CHANGE BACK TO 1200 when done.
-    public final int LAUNCHER_MIN_VELOCITY = 200; //2571 RPM
+    public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
 
 
     /*
@@ -294,7 +294,7 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
         telemetry.addData("LAUNCHER_MIN_VELOCITY", "" + LAUNCHER_MIN_VELOCITY);
         telemetry.addData("LAUNCHER_TARGET_VELOCITY", ""+LAUNCHER_TARGET_VELOCITY);
         telemetry.update();
-        if (gamepad1.right_bumper /* && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY */) {
+        if (gamepad1.right_bumper && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY ) {
             windmillServo.setPower(1);
 //            intakePower += 0.5;
         } else {
