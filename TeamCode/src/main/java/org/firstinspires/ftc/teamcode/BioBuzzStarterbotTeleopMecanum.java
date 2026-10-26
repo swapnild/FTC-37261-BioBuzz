@@ -74,7 +74,6 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
      * enough to make a successful throw.
      */
     public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
-    //Setting LAUNCHER_MIN_VELOCITY VERY LOW. CHANGE BACK TO 1200 when done.
     public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
 
 
@@ -144,7 +143,6 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
          */
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(40, 0, 0, 12.5));
 
         /*
@@ -167,6 +165,7 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
          * Tell the driver that initialization is complete.
          */
         telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     /*
@@ -212,7 +211,7 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
          * allow us to avoid setting the same motors/servos power more than once per loop. That can
          * create erratic behavior.
          */
-        intakePower = gamepad1.right_trigger - gamepad1.left_trigger;
+        intakePower = gamepad2.right_trigger - gamepad2.left_trigger;
 
         launch();
 
@@ -232,8 +231,8 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
          * Show motor powers on the Driver Station via telemetry.
          */
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower);
-        telemetry.addData("Triggers", "left (%.2f, right (%.2f)",gamepad1.left_trigger, gamepad1.right_trigger);
-    }
+        telemetry.addData("Triggers", "left (%.2f, right (%.2f)",gamepad2.left_trigger, gamepad2.right_trigger);
+
 
     /*
      * Code to run ONCE after the driver hits STOP
@@ -270,14 +269,14 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
 
     void launch() {
         /*
-         * Calling gamepad1.right_bumper returns a boolean which will be true if the bumper is
+         * Calling gamepad2.right_bumper returns a boolean which will be true if the bumper is
          * held down, and false if it is not. Notably, this will continue to be true for every
          * cycle of our code that the driver holds down that bumper.
          * The first step of our launch() function is checking to see if the user is currently
          * holding down the right gamepad. If they are, then we want to start spinning up the launcher.
          * Otherwise, we start spinning the launcher down.
          */
-        if (gamepad1.right_bumper) {
+        if (gamepad2.right_bumper) {
             launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
         } else {
             launcher.setVelocity(0);
@@ -294,7 +293,7 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
         telemetry.addData("LAUNCHER_MIN_VELOCITY", "" + LAUNCHER_MIN_VELOCITY);
         telemetry.addData("LAUNCHER_TARGET_VELOCITY", ""+LAUNCHER_TARGET_VELOCITY);
         telemetry.update();
-        if (gamepad1.right_bumper /* && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY*/ ) {
+        if (gamepad2.right_bumper /* && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY*/ ) {
             windmillServo.setPower(1);
 //            intakePower += 0.5;
         } else {
