@@ -114,7 +114,7 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
     @Override
     public void loop() {
         telemetry.addLine("Press A to reset Yaw");
-        telemetry.addLine("Hold left bumper to drive in robot relative");
+        telemetry.addLine("Hold left trigger to drive in robot relative");
         telemetry.addLine("The left joystick sets the robot direction");
         telemetry.addLine("Moving the right joystick left and right turns the robot");
 
@@ -125,7 +125,7 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
         }
         // If you press the left bumper, you get a drive from the point of view of the robot
         // (much like driving an RC vehicle)
-        if (gamepad1.left_bumper) {
+        if (gamepad1.left_trigger_pressed) {
             mecanumDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         } else {
             driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
