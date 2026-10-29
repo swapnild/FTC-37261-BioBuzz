@@ -29,7 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import android.util.Size;
+
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -83,7 +85,7 @@ public class ConceptAprilTag extends LinearOpMode {
      */
     private VisionPortal visionPortal;
 
-    // To find the VI`D/PID for a camera:
+    // To find the VID/PID for a camera:
     //
     // Linux: open a terminal, run "lsusb", locate the line for your camera,
     // and find the section that resembles "ID 1d6b:0002"; this is VID:PID
@@ -95,8 +97,14 @@ public class ConceptAprilTag extends LinearOpMode {
     // Windows: open a PowerShell, run:
     // Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -like 'USB*' } | Select-Object FriendlyName, InstanceId
     // and locate the line for your camera. The VID and PID is listed directly in the line.
-    static final int VENDOR_ID_SUNPLUS_INNOVATION_TECHNOLOGY = 0x1BCF;
-    static final int PRODUCT_ID_ARDUCAM_OV5648 = 0x284C;
+    //static final int VENDOR_ID_SUNPLUS_INNOVATION_TECHNOLOGY = 0x1BCF;
+    //static final int PRODUCT_ID_ARDUCAM_OV5648 = 0x284C;
+    // The camera that we have is called Logitech Webcam C930e. I am adding variables below to
+    // set the VID and PID for that camera.
+    //Logitech Webcam C930e                  USB\VID_046D&PID_0843&MI_00\6&13F9E73C&0&0000
+    static final int VENDOR_ID_LOGITECH = 0x046D ;
+    static final int PRODUCT_ID_C930E = 0x0843;
+
 
     @Override
     public void runOpMode() {
@@ -106,8 +114,8 @@ public class ConceptAprilTag extends LinearOpMode {
         // Quirks have no effect unless the camera you are using matches the specified VID/PID
         CameraCompatibilityManager.getInstance()
                 .addQuirk(
-                        VENDOR_ID_SUNPLUS_INNOVATION_TECHNOLOGY,
-                        PRODUCT_ID_ARDUCAM_OV5648,
+                        VENDOR_ID_LOGITECH,
+                        PRODUCT_ID_C930E,
                         CameraCompatibilityManager.Quirk.AVOID_LIB_USB_RESET_DEVICE);
 
         initAprilTag();
@@ -185,10 +193,10 @@ public class ConceptAprilTag extends LinearOpMode {
         }
 
         // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
+        builder.setCameraResolution(new Size(640, 480));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        //builder.enableLiveView(true);
+        builder.enableLiveView(false);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
         //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
