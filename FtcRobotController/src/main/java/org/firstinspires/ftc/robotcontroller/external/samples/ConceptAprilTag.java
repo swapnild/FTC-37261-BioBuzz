@@ -85,7 +85,7 @@ public class ConceptAprilTag extends LinearOpMode {
      */
     private VisionPortal visionPortal;
 
-    // To find the VID/PID for a camera:
+    // To find the VI`D/PID for a camera:
     //
     // Linux: open a terminal, run "lsusb", locate the line for your camera,
     // and find the section that resembles "ID 1d6b:0002"; this is VID:PID
