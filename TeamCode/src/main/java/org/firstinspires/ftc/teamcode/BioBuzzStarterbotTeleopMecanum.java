@@ -231,8 +231,8 @@ public class BioBuzzStarterbotTeleopMecanum extends OpMode {
          * Show motor powers on the Driver Station via telemetry.
          */
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower);
-        telemetry.addData("Triggers", "left (%.2f, right (%.2f)",gamepad2.left_trigger, gamepad2.right_trigger);
-
+        telemetry.addData("Triggers", "left (%.2f, right (%.2f)", gamepad2.left_trigger, gamepad2.right_trigger);
+    }
 
     /*
      * Code to run ONCE after the driver hits STOP
