@@ -29,7 +29,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -89,7 +89,7 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder
         // wires, you should remove these
-        //COMMENTED OUT BECAUSE WE DONT HAVE ENCODER FOR DRIVE MOTORS
+        //COMMENTED OUT BECAUSE WE DON'T HAVE ENCODER FOR DRIVE MOTORS
         /*
         * leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         * rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -114,7 +114,7 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
     @Override
     public void loop() {
         telemetry.addLine("Press A to reset Yaw");
-        telemetry.addLine("Hold left trigger to drive in robot relative");
+        telemetry.addLine("Hold left bumper to drive in robot relative");
         telemetry.addLine("The left joystick sets the robot direction");
         telemetry.addLine("Moving the right joystick left and right turns the robot");
 
@@ -125,24 +125,26 @@ public class RobotTeleopMecanumFieldRelativeDrive extends OpMode {
         }
         // If you press the left bumper, you get a drive from the point of view of the robot
         // (much like driving an RC vehicle)
-        if (gamepad1.left_trigger_pressed) {
-            mecanumDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        } else {
+        if (gamepad1.left_bumper) {
             driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        } else {
+            mecanumDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
     }
 
     // This routine drives the robot field relative
     private void driveFieldRelative(double forward, double right, double rotate) {
         // First, convert direction being asked to drive to polar coordinates
-        double theta = Math.atan2(forward, right);
-        double r = Math.hypot(right, forward);
+        double theta = Math.atan2(forward, right); // This is the angle at which the user wants
+        // to go relative to field
+        double r = Math.hypot(right, forward); //This is the magnitude of total power use want to
+        // give
 
         // Second, rotate angle by the angle the robot is pointing
         theta = AngleUnit.normalizeRadians(theta -
                 imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
 
-        // Third, convert back to cartesian
+        // Third, convert back to Cartesian
         double newForward = r * Math.sin(theta);
         double newRight = r * Math.cos(theta);
 
