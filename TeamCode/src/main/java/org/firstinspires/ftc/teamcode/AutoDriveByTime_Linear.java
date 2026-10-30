@@ -33,7 +33,11 @@ import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -64,6 +68,25 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    private DcMotorEx launcher = null;
+    private DcMotor intake = null;
+    private CRServo leftIntakeServo = null;
+    private CRServo rightIntakeServo = null;
+    private CRServo windmillServo = null;
+
+
+    /*
+     * These two variables are used to control the velocity of the launcher motor.
+     * They are both in encoder ticks per second. The motors we use in the FIRST Tech Challenge
+     * have encoders with a resolution of 28 ticks per revolution. We can convert this to RPM
+     * by dividing the value by 28, to get to revolutions per second, before multiplying by 60
+     * to get revolutions per minute.
+     * We pass the target velocity variable to our motor to set the goal. We use the min velocity
+     * in the launch() function to only run the windmill servo when the motor is spinning fast
+     * enough to make a successful throw.
+     */
+    public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
+    public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
 
     /*
      * These four variables store the power we need to apply to the motors. In other cases, we may
@@ -92,6 +115,11 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
+        windmillServo = hardwareMap.get(CRServo.class, "windmillServo");
+        leftIntakeServo = hardwareMap.get(CRServo.class, "left_intake_servo");
+        rightIntakeServo = hardwareMap.get(CRServo.class, "right_intake_servo");
 
         /*
          * To drive forward, most robots need the motor on one side to be reversed,
@@ -113,6 +141,32 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         rightFrontDrive.setZeroPowerBehavior(BRAKE);
         leftBackDrive.setZeroPowerBehavior(BRAKE);
         rightBackDrive.setZeroPowerBehavior(BRAKE);
+        intake.setZeroPowerBehavior(BRAKE);
+
+        /*
+         * Here we set our launcher to the RUN_USING_ENCODER runmode.
+         * If you notice that you have no control over the velocity of the motor, it just jumps
+         * right to a number much higher than your set point, make sure that your encoders are plugged
+         * into the port right beside the motor itself. And that the motors polarity is consistent
+         * through any wiring.
+         */
+
+        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(40, 0, 0, 12.5));
+
+        /*
+         * set Feeders to an initial value to initialize the servo controller
+         */
+        leftIntakeServo.setPower(0);
+        rightIntakeServo.setPower(0);
+        windmillServo.setPower(0);
+
+        /*
+         * Much like our drivetrain motors, we set the right intake servo to reverse so that both
+         * servos work to pull elements into the intake.
+         */
+        rightIntakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        windmillServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -143,7 +197,16 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         //stop rolling forward
         mecanumDrive(0, 0, 0);
 
-        // Step 3:  Stop
+        // Step 3:  Launch
+        //Add code for launching
+        initLauncher();
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+            launchAuto();
+        }
+
+        launcher.setPower(0);
+
+        // Step 4:  Stop
         mecanumDrive(0, 0, 0);
 
         telemetry.addData("Path", "Complete");
@@ -175,6 +238,23 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
+    }
+
+    void launchAuto() {
+        /*
+        * starting launcher motor
+         */
+        launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+
+
+        windmillServo.setPower(1);
+
+    }
+
+    void initLauncher() {
+        while(launcher.getVelocity() < LAUNCHER_MIN_VELOCITY) {
+            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+        }
     }
 
 }
