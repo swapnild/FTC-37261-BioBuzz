@@ -68,6 +68,25 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    private DcMotorEx launcher = null;
+    private DcMotor intake = null;
+    private CRServo leftIntakeServo = null;
+    private CRServo rightIntakeServo = null;
+    private CRServo windmillServo = null;
+
+
+    /*
+     * These two variables are used to control the velocity of the launcher motor.
+     * They are both in encoder ticks per second. The motors we use in the FIRST Tech Challenge
+     * have encoders with a resolution of 28 ticks per revolution. We can convert this to RPM
+     * by dividing the value by 28, to get to revolutions per second, before multiplying by 60
+     * to get revolutions per minute.
+     * We pass the target velocity variable to our motor to set the goal. We use the min velocity
+     * in the launch() function to only run the windmill servo when the motor is spinning fast
+     * enough to make a successful throw.
+     */
+    public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
+    public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
 
     private DcMotorEx launcher = null;
     private DcMotor intake = null;
@@ -261,6 +280,23 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
+    }
+
+    void launchAuto() {
+        /*
+        * starting launcher motor
+         */
+        launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+
+
+        windmillServo.setPower(1);
+
+    }
+
+    void initLauncher() {
+        while(launcher.getVelocity() < LAUNCHER_MIN_VELOCITY) {
+            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+        }
     }
 
 }
