@@ -88,6 +88,28 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
     public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
     public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
 
+    private DcMotorEx launcher = null;
+    private DcMotor intake = null;
+    private CRServo leftIntakeServo = null;
+    private CRServo rightIntakeServo = null;
+    private CRServo windmillServo = null;
+
+
+    /*
+     * These two variables are used to control the velocity of the launcher motor.
+     * They are both in encoder ticks per second. The motors we use in the FIRST Tech Challenge
+     * have encoders with a resolution of 28 ticks per revolution. We can convert this to RPM
+     * by dividing the value by 28, to get to revolutions per second, before multiplying by 60
+     * to get revolutions per minute.
+     * We pass the target velocity variable to our motor to set the goal. We use the min velocity
+     * in the launch() function to only run the windmill servo when the motor is spinning fast
+     * enough to make a successful throw.
+     */
+    public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
+    //Setting LAUNCHER_MIN_VELOCITY VERY LOW. CHANGE BACK TO 1200 when done.
+    public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
+
+
     /*
      * These four variables store the power we need to apply to the motors. In other cases, we may
      * choose to declare these variables inside the mecanumDrive() function, instead we declare them
@@ -97,7 +119,10 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
     double rightFrontPower;
     double leftBackPower;
     double rightBackPower;
-    private ElapsedTime     runtime = new ElapsedTime();
+    // Create a variable to set to the intake.
+    double intakePower;
+
+    private ElapsedTime    runtime = new ElapsedTime();
 
 
     static final double     FORWARD_SPEED = 0.6;
@@ -121,6 +146,8 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         leftIntakeServo = hardwareMap.get(CRServo.class, "left_intake_servo");
         rightIntakeServo = hardwareMap.get(CRServo.class, "right_intake_servo");
 
+
+
         /*
          * To drive forward, most robots need the motor on one side to be reversed,
          * because the axles point in opposite directions. Pushing the left stick forward
@@ -141,8 +168,6 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         rightFrontDrive.setZeroPowerBehavior(BRAKE);
         leftBackDrive.setZeroPowerBehavior(BRAKE);
         rightBackDrive.setZeroPowerBehavior(BRAKE);
-        intake.setZeroPowerBehavior(BRAKE);
-
         /*
          * Here we set our launcher to the RUN_USING_ENCODER runmode.
          * If you notice that you have no control over the velocity of the motor, it just jumps
@@ -152,6 +177,7 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
          */
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(40, 0, 0, 12.5));
 
         /*
@@ -167,6 +193,8 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
          */
         rightIntakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
         windmillServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Commenting out to make sure that the launcher spins right
+        //launcher.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -175,39 +203,53 @@ public class AutoDriveByTime_Linear extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
 
-        // Step 1:  Drive forward for 0.5 seconds
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-            mecanumDrive(FORWARD_SPEED, 0, 0);
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
+// Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.//        // Step 1:  Drive forward for 0.5 seconds
+//        runtime.reset();
+//        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+//            mecanumDrive(FORWARD_SPEED, 0, 0);
+//            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+//            telemetry.update();
+//        }
+//        //stop rolling forward
+//        mecanumDrive(0, 0, 0);
+
+//        // Step 2:  strafe right for 0.5 Second
+//        runtime.reset();
+//        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+//            mecanumDrive(0, FORWARD_SPEED, 0);
+//            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
+//            telemetry.update();
+//        }
+//        //stop rolling forward
+//        mecanumDrive(0, 0, 0);
+//
+//        // Step 3:  Stop
+//        mecanumDrive(0, 0, 0);
+
+        //Add code for starting launcher motor
+        telemetry.addData("Launcher", "Starting");
+
+        while (launcher.getVelocity()<LAUNCHER_MIN_VELOCITY) {
+            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
         }
-        //stop rolling forward
-        mecanumDrive(0, 0, 0);
+        telemetry.addData("Launcher", "Started");
 
-        // Step 2:  strafe right for 0.5 Second
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
-            mecanumDrive(0, FORWARD_SPEED, 0);
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        //stop rolling forward
-        mecanumDrive(0, 0, 0);
 
-        // Step 3:  Launch
         //Add code for launching
-        initLauncher();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-            launchAuto();
-        }
+        telemetry.addData("Windmill", "Starting");
 
-        launcher.setPower(0);
+        windmillServo.setPower(1);
+        sleep(2000);
+        telemetry.addData("Windmill", "Started");
 
-        // Step 4:  Stop
-        mecanumDrive(0, 0, 0);
+        //Add code for stopping the launcher
+        telemetry.addData("Launcher", "stopping");
+
+        windmillServo.setPower(0);
+        launcher.setVelocity(0);
+        telemetry.addData("Launcher", "Stopped");
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
