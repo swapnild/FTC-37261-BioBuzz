@@ -1,3 +1,32 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
@@ -10,8 +39,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-public class autonomous_secondary extends LinearOpMode {
+@Autonomous(name="Robot: Secondary Autonomous", group="Robot")
+public class Autonomous_Secondary extends LinearOpMode {
     // Declare OpMode members.
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -56,7 +85,8 @@ public class autonomous_secondary extends LinearOpMode {
 
 
     static final double     FORWARD_SPEED = 0.4;
-    static final double     TURN_SPEED    = 0.5;
+    static final double     STRAFE_SPEED = 0.4;
+    static final double     TURN_SPEED = 0.5;
 
     @Override
     public void runOpMode() {
@@ -157,9 +187,10 @@ public class autonomous_secondary extends LinearOpMode {
 //        // Step 3:  Stop
 //        mecanumDrive(0, 0, 0);
 
-        //Add code for starting launcher motor
+        //Wait for 10 seconds for the other team to finish tipping
         sleep(10000);
 
+        //Add code for starting launcher motor
         telemetry.addData("Launcher", "Starting");
 
         while (launcher.getVelocity()<LAUNCHER_MIN_VELOCITY) {
@@ -190,6 +221,7 @@ public class autonomous_secondary extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2)) {
             mecanumDrive(0, FORWARD_SPEED, 0);
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
         }
 
         telemetry.addData("Path", "Complete");
