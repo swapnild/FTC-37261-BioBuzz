@@ -59,7 +59,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Time", group="Robot")
+@Autonomous(name="Robot: Auto Drive By Distance Test", group="Robot")
 //@Disabled
 public class AutoDriveByDistance_Linear extends LinearOpMode {
 
@@ -111,6 +111,7 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
 
     static final double     FORWARD_SPEED = 0.1;
     static final double     TURN_SPEED    = 0.5;
+    static final double     STRAFE_SPEED = 0.1;
 
     @Override
     public void runOpMode() {
@@ -235,11 +236,41 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
         telemetry.addData("Launcher", "Stopped");
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-            mecanumDrive(FORWARD_SPEED, 0, 0);
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
-        }
+//        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+//            mecanumDrive(FORWARD_SPEED, 0, 0);
+//            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
+//        }
 
+        driveByDistance(6, 0);
+        sleep(2000);
+        driveByDistance(-6, 0);
+        sleep(2000);
+
+        driveByDistance(12, 0);
+        sleep(2000);
+        driveByDistance(-12, 0);
+        sleep(2000);
+
+        driveByDistance(18, 0);
+        sleep(2000);
+        driveByDistance(-18, 0);
+        sleep(2000);
+
+
+        driveByDistance(0, 6);
+        sleep(2000);
+        driveByDistance(0, -6);
+        sleep(2000);
+
+        driveByDistance(0, 12);
+        sleep(2000);
+        driveByDistance(0, -12);
+        sleep(2000);
+
+        driveByDistance(0, 18);
+        sleep(2000);
+        driveByDistance(0, -18);
+        sleep(2000);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -289,7 +320,7 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
         // Strafe right/left in inches (negative = left)
         runtime.reset();
         double sidewaysTime = Math.abs(sideways) / horizontalSpeed;
-        double sidewaysPower = Math.signum(sideways) * FORWARD_SPEED;
+        double sidewaysPower = Math.signum(sideways) * STRAFE_SPEED;
         while (opModeIsActive() && (runtime.seconds() < sidewaysTime)) {
             mecanumDrive(0, sidewaysPower, 0);
             telemetry.addData("Path", "Strafe: %4.1f S Elapsed", runtime.seconds());
