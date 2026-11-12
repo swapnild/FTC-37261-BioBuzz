@@ -72,7 +72,7 @@ import java.util.List;
  */
 @Autonomous(name = "April Tag Detector Function", group = "Concept")
 //@Disabled
-public class aprilTagDetectBoolean extends LinearOpMode {
+public class aprilTagDetectFunction extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
