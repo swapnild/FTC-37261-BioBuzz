@@ -59,7 +59,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Time", group="Robot")
+@Autonomous(name="Robot: Primary Autonomous", group="Robot")
 //@Disabled
 public class Autonomous_Primary extends LinearOpMode {
 
@@ -107,6 +107,7 @@ public class Autonomous_Primary extends LinearOpMode {
 
 
     static final double     FORWARD_SPEED = 0.1;
+    static final double     STRAFE_SPEED = 0.1;
     static final double     TURN_SPEED    = 0.5;
 
     @Override
@@ -232,9 +233,27 @@ public class Autonomous_Primary extends LinearOpMode {
         telemetry.addData("Launcher", "Stopped");
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+        while (opModeIsActive() && (runtime.seconds() < 1)) {
             mecanumDrive(FORWARD_SPEED, 0, 0);
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
+        }
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
+            mecanumDrive(0, STRAFE_SPEED, 0);
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
+        }
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 3)) {
+            mecanumDrive(FORWARD_SPEED, 0, 0);
+            telemetry.addData("Path", "Leg 3: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
+        }
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+            mecanumDrive(0, STRAFE_SPEED, 0);
+            telemetry.addData("Path", "Leg 4: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
         }
 
 
