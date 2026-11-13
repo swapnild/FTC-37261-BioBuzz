@@ -75,7 +75,7 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private CRServo windmillServo = null;
 
     // Define distance variables to define how far the robot goes
-    // Measured in inches per second (spi)
+    // Measured in inches per second
     public final float forwardSpeed = 12;
     public final float horizontalSpeed = 12;
 
@@ -109,9 +109,9 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private ElapsedTime    runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 0.1;
+    static final double     FORWARD_SPEED = 1;
     static final double     TURN_SPEED    = 0.5;
-    static final double     STRAFE_SPEED = 0.1;
+    static final double     STRAFE_SPEED = 1;
 
     @Override
     public void runOpMode() {
