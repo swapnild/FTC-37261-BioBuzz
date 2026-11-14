@@ -109,9 +109,9 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private ElapsedTime    runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 1;
+    static final double     FORWARD_SPEED = 4;
     static final double     TURN_SPEED    = 0.5;
-    static final double     STRAFE_SPEED = 1;
+    static final double     STRAFE_SPEED = 4;
 
     @Override
     public void runOpMode() {
