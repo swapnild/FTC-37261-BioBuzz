@@ -76,7 +76,7 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
 
     // Define distance variables to define how far the robot goes
     // Measured in inches per second
-    public final float forwardSpeed = 12;
+    public final float forwardSpeed = 24;
     public final float horizontalSpeed = 12;
 
     /*
@@ -109,7 +109,7 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private ElapsedTime    runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 4;
+    static final double     FORWARD_SPEED = 1;
     static final double     TURN_SPEED    = 0.5;
     static final double     STRAFE_SPEED = 4;
 
