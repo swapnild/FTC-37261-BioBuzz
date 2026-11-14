@@ -27,11 +27,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,50 +39,20 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/*
- * This OpMode illustrates the concept of driving a path based on time.
- * The code is structured as a LinearOpMode
- *
- * The code assumes that you do NOT have encoders on the wheels,
- *   otherwise you would use: RobotAutoDriveByEncoder;
- *
- *   The desired path in this example is:
- *   - Drive forward for 3 seconds
- *   - Spin right for 1.3 seconds
- *   - Drive Backward for 1 Second
- *
- *  The code is written in a simple form with no optimizations.
- *  However, there are several ways that this type of sequence could be streamlined,
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
 
-public abstract class Autonomous_Primary extends LinearOpMode {
+public abstract class autonomous_functions extends LinearOpMode {
 
     // Declare OpMode members.
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
-    private DcMotorEx launcher = null;
-    private DcMotor intake = null;
-    private CRServo leftIntakeServo = null;
-    private CRServo rightIntakeServo = null;
-    private CRServo windmillServo = null;
+    protected DcMotor leftFrontDrive = null;
+    protected DcMotor leftBackDrive = null;
+    protected DcMotor rightFrontDrive = null;
+    protected DcMotor rightBackDrive = null;
+    protected DcMotorEx launcher = null;
+    protected DcMotor intake = null;
+    protected CRServo leftIntakeServo = null;
+    protected CRServo rightIntakeServo = null;
+    protected CRServo windmillServo = null;
 
-
-
-    /*
-     * These two variables are used to control the velocity of the launcher motor.
-     * They are both in encoder ticks per second. The motors we use in the FIRST Tech Challenge
-     * have encoders with a resolution of 28 ticks per revolution. We can convert this to RPM
-     * by dividing the value by 28, to get to revolutions per second, before multiplying by 60
-     * to get revolutions per minute.
-     * We pass the target velocity variable to our motor to set the goal. We use the min velocity
-     * in the launch() function to only run the windmill servo when the motor is spinning fast
-     * enough to make a successful throw.
-     */
     public final int LAUNCHER_TARGET_VELOCITY = 1250; //2678 RPM
     //Setting LAUNCHER_MIN_VELOCITY VERY LOW. CHANGE BACK TO 1200 when done.
     public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
@@ -101,14 +70,14 @@ public abstract class Autonomous_Primary extends LinearOpMode {
     // Create a variable to set to the intake.
     double intakePower;
 
-    private ElapsedTime    runtime = new ElapsedTime();
+    protected ElapsedTime runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 0.1;
-    static final double     STRAFE_SPEED = 0.1;
-    static final double     TURN_SPEED    = 0.5;
+    static final double FORWARD_SPEED = 0.4;
+    static final double STRAFE_SPEED = 0.4;
+    static final double TURN_SPEED = 0.4;
 
-    public void initialize_hardware () {
+    protected void initialize_hardware() {
 
         /*
          * Initialize the hardware variables. Note that the strings used here as parameters
@@ -172,9 +141,11 @@ public abstract class Autonomous_Primary extends LinearOpMode {
          */
         rightIntakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
         windmillServo.setDirection(DcMotorSimple.Direction.REVERSE);
-    public void mecanumDrive(double forward, double strafe, double rotate, double seconds) {
+    }
+
+    protected void mecanumDrive(double forward, double strafe, double rotate, double seconds) {
         runtime.reset();
-        while runtime.seconds() < seconds {
+        while (runtime.seconds() < seconds) {
             leftFrontPower = forward + strafe + rotate;
             rightFrontPower = forward - strafe - rotate;
             leftBackPower = forward - strafe + rotate;
@@ -193,10 +164,27 @@ public abstract class Autonomous_Primary extends LinearOpMode {
 
             /*
              * Send calculated power to wheels
-            */
+             */
             leftFrontDrive.setPower(leftFrontPower);
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
         }
     }
+    protected void shootFor(double seconds) {
+        //this is setting the motor to the speed
+        while (launcher.getVelocity()<LAUNCHER_MIN_VELOCITY) {
+            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+        }
+        windmillServo.setPower(1);
+        sleep((long) (1000 * seconds));
+
+        launcher.setVelocity(0);
+        windmillServo.setPower(0);
+    }
+    protected void intakeFor(double seconds) {
+        intake.setPower(1);
+        sleep((long) (seconds * 1000));
+        intake.setPower(0);
+    }
+}
