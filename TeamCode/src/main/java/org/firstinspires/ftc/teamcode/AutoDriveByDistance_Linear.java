@@ -109,9 +109,9 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private ElapsedTime    runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 0.5;
+    static final double     FORWARD_SPEED = 0.1;
     static final double     TURN_SPEED    = 0.5;
-    static final double     STRAFE_SPEED = 4;
+    static final double     STRAFE_SPEED = 1;
 
     @Override
     public void runOpMode() {
@@ -241,6 +241,9 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
 //            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
 //        }
 
+
+        telemetry.addData("Build Version", "Merged v2 - Nov 13");
+        telemetry.update();
         driveByDistance(6, 0);
         sleep(2000);
         driveByDistance(-6, 0);
