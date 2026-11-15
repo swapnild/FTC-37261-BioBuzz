@@ -75,10 +75,10 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private CRServo windmillServo = null;
 
     // Define distance variables to define how far the robot goes
-    // Measured in inches per second (spi)
-    public final float forwardSpeed = 12;
-    public final float horizontalSpeed = 12;
-
+    // Measured in inches per second
+    public final float forwardSpeed = 10;
+    public final float backwardSpeed = 11;
+    public final float horizontalSpeed = 10;
     /*
      * These two variables are used to control the velocity of the launcher motor.
      * They are both in encoder ticks per second. The motors we use in the FIRST Tech Challenge
@@ -109,9 +109,9 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     private ElapsedTime    runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 0.1;
+    static final double     FORWARD_SPEED = 0.2;
     static final double     TURN_SPEED    = 0.5;
-    static final double     STRAFE_SPEED = 0.1;
+    static final double     STRAFE_SPEED = 0.2;
 
     @Override
     public void runOpMode() {
@@ -241,20 +241,23 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
 //            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());         telemetry.update();
 //        }
 
-        driveByDistance(6, 0);
-        sleep(2000);
-        driveByDistance(-6, 0);
-        sleep(2000);
 
-        driveByDistance(12, 0);
-        sleep(2000);
-        driveByDistance(-12, 0);
-        sleep(2000);
-
-        driveByDistance(18, 0);
-        sleep(2000);
-        driveByDistance(-18, 0);
-        sleep(2000);
+        telemetry.addData("Build Version", "Merged v2 - Nov 13");
+        telemetry.update();
+//        driveByDistance(6, 0);
+//        sleep(2000);
+//        driveByDistance(-6, 0);
+//        sleep(2000);
+//
+//        driveByDistance(12, 0);
+//        sleep(2000);
+//        driveByDistance(-12, 0);
+//        sleep(2000);
+//
+//        driveByDistance(18, 0);
+//        sleep(2000);
+//        driveByDistance(-18, 0);
+//        sleep(2000);
 
 
         driveByDistance(0, 6);
@@ -308,7 +311,13 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
     void driveByDistance(float forward, float sideways) {
         // Drive forward/backward in inches (negative = backward)
         runtime.reset();
-        double forwardTime = Math.abs(forward) / forwardSpeed;
+        double forwardTime;
+        if (forward > 0) {
+            forwardTime = Math.abs(forward) / forwardSpeed;
+        }
+        else {
+            forwardTime = Math.abs(forward) / backwardSpeed;
+        }
         double forwardPower = Math.signum(forward) * FORWARD_SPEED;
         while (opModeIsActive() && (runtime.seconds() < forwardTime)) {
             mecanumDrive(forwardPower, 0, 0);
