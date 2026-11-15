@@ -244,20 +244,20 @@ public class AutoDriveByDistance_Linear extends LinearOpMode {
 
         telemetry.addData("Build Version", "Merged v2 - Nov 13");
         telemetry.update();
-        driveByDistance(6, 0);
-        sleep(2000);
-        driveByDistance(-6, 0);
-        sleep(2000);
-
-        driveByDistance(12, 0);
-        sleep(2000);
-        driveByDistance(-12, 0);
-        sleep(2000);
-
-        driveByDistance(18, 0);
-        sleep(2000);
-        driveByDistance(-18, 0);
-        sleep(2000);
+//        driveByDistance(6, 0);
+//        sleep(2000);
+//        driveByDistance(-6, 0);
+//        sleep(2000);
+//
+//        driveByDistance(12, 0);
+//        sleep(2000);
+//        driveByDistance(-12, 0);
+//        sleep(2000);
+//
+//        driveByDistance(18, 0);
+//        sleep(2000);
+//        driveByDistance(-18, 0);
+//        sleep(2000);
 
 
         driveByDistance(0, 6);
