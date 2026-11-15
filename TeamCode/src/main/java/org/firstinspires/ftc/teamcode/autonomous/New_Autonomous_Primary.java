@@ -8,9 +8,9 @@ public class New_Autonomous_Primary extends AutonomousFunctions {
         initialize_hardware();
         waitForStart();
         shootFor(10);
-        mecanumDrive(FORWARD_SPEED, 0, 0, 1);
-        mecanumDrive(0, -STRAFE_SPEED, 0, 1.5);
-        mecanumDrive(FORWARD_SPEED, 0, 0, 3);
-        mecanumDrive(0, -STRAFE_SPEED, 0, 0.5);
+        mecanumDriveFor(FORWARD_SPEED, 0, 0, 1);
+        mecanumDriveFor(0, -STRAFE_SPEED, 0, 1.5);
+        mecanumDriveFor(FORWARD_SPEED, 0, 0, 3);
+        mecanumDriveFor(0, -STRAFE_SPEED, 0, 0.5);
     }
 }

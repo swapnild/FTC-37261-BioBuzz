@@ -57,7 +57,11 @@ public abstract class AutonomousFunctions extends LinearOpMode {
     //Setting LAUNCHER_MIN_VELOCITY VERY LOW. CHANGE BACK TO 1200 when done.
     public final int LAUNCHER_MIN_VELOCITY = 1200; //2571 RPM
 
-
+    // Define distance variables to define how far the robot goes
+    // Measured in inches per second
+    public final float forwardSpeed = 10;
+    public final float backwardSpeed = 11;
+    public final float horizontalSpeed = 10;
     /*
      * These four variables store the power we need to apply to the motors. In other cases, we may
      * choose to declare these variables inside the mecanumDrive() function, instead we declare them
@@ -143,32 +147,10 @@ public abstract class AutonomousFunctions extends LinearOpMode {
         windmillServo.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    protected void mecanumDrive(double forward, double strafe, double rotate, double seconds) {
+    protected void mecanumDriveFor(double forward, double strafe, double rotate, double seconds) {
         runtime.reset();
         while (runtime.seconds() < seconds) {
-            leftFrontPower = forward + strafe + rotate;
-            rightFrontPower = forward - strafe - rotate;
-            leftBackPower = forward - strafe + rotate;
-            rightBackPower = forward + strafe - rotate;
-
-            double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
-
-            if (max > 1.0) {
-                leftFrontPower /= max;
-                rightFrontPower /= max;
-                leftBackPower /= max;
-                rightBackPower /= max;
-            }
-
-            /*
-             * Send calculated power to wheels
-             */
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
+            mecanumDrive(forward, strafe, rotate);
         }
     }
     protected void shootFor(double seconds) {
@@ -186,5 +168,59 @@ public abstract class AutonomousFunctions extends LinearOpMode {
         intake.setPower(1);
         sleep((long) (seconds * 1000));
         intake.setPower(0);
+    }
+    void driveByDistance(float forward, float sideways) {
+        // Drive forward/backward in inches (negative = backward)
+        runtime.reset();
+        double forwardTime;
+        if (forward > 0) {
+            forwardTime = Math.abs(forward) / forwardSpeed;
+        }
+        else {
+            forwardTime = Math.abs(forward) / backwardSpeed;
+        }
+        double forwardPower = Math.signum(forward) * FORWARD_SPEED;
+        while (opModeIsActive() && (runtime.seconds() < forwardTime)) {
+            mecanumDrive(forwardPower, 0, 0);
+            telemetry.addData("Path", "Forward: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        mecanumDrive(0, 0, 0);
+
+        // Strafe right/left in inches (negative = left)
+        runtime.reset();
+        double sidewaysTime = Math.abs(sideways) / horizontalSpeed;
+        double sidewaysPower = Math.signum(sideways) * STRAFE_SPEED;
+        while (opModeIsActive() && (runtime.seconds() < sidewaysTime)) {
+            mecanumDrive(0, sidewaysPower, 0);
+            telemetry.addData("Path", "Strafe: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        mecanumDrive(0, 0, 0);
+    }
+    void mecanumDrive(double forward, double strafe, double rotate) {
+        leftFrontPower = forward + strafe + rotate;
+        rightFrontPower = forward - strafe - rotate;
+        leftBackPower = forward - strafe + rotate;
+        rightBackPower = forward + strafe - rotate;
+
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        /*
+         * Send calculated power to wheels
+         */
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
     }
 }
