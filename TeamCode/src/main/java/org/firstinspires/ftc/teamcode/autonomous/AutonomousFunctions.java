@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-public abstract class autonomous_functions extends LinearOpMode {
+public abstract class AutonomousFunctions extends LinearOpMode {
 
     // Declare OpMode members.
     protected DcMotor leftFrontDrive = null;

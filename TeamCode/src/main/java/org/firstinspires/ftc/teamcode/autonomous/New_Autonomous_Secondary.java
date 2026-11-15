@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name="Robot: New Secondary Autonomous", group="Robot")
-public class New_Autonomous_Secondary extends autonomous_functions {
+public class New_Autonomous_Secondary extends AutonomousFunctions {
     @Override
     public void runOpMode() {
         initialize_hardware();
