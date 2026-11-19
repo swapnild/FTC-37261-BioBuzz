@@ -239,7 +239,7 @@ public class aprilTagDetectFunction extends LinearOpMode {
             aprilTagDetected = (false);
             telemetry.addLine("I don't see any April Tags");
         }
-        if (isAprilTagDetected()) {
+        if (aprilTagDetected) {
             telemetry.addLine("I see at least one April Tag");
             telemetry.update();
             sleep(20);
