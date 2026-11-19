@@ -10,6 +10,6 @@ public class New_Autonomous_Secondary_By_Distance extends AutonomousFunctions {
         sleep(10000);
         shootFor(7);
         driveByDistance(18, 0);
-        driveByDistance(0, -24);
+        driveByDistance(0, 48);
     }
 }

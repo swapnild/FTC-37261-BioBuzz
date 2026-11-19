@@ -9,8 +9,8 @@ public class New_Autonomous_Secondary extends AutonomousFunctions {
         waitForStart();
         sleep(10000);
         shootFor(7);
-        mecanumDriveFor(FORWARD_SPEED, 0, 0, 0.75);
-        mecanumDriveFor(0, -STRAFE_SPEED, 0, 2);
+        mecanumDriveFor(FORWARD_POWER, 0, 0, 0.75);
+        mecanumDriveFor(0, -STRAFE_POWER, 0, 2);
     }
 }
 
