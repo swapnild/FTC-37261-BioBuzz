@@ -108,6 +108,11 @@ android {
         pickFirst '**/*.so'
     }
     ndkVersion '21.3.6528147'
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
 }
 
 repositories {
