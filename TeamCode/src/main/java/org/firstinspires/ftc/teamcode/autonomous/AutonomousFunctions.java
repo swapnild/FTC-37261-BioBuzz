@@ -59,9 +59,13 @@ public abstract class AutonomousFunctions extends LinearOpMode {
 
     // Define distance variables to define how far the robot goes
     // Measured in inches per second
-    public final float forwardSpeed = 10;
-    public final float backwardSpeed = 11;
-    public final float horizontalSpeed = 10;
+    public final float forwardSpeed = 3;
+    public final float backwardSpeed = 3;
+    public final float horizontalSpeed = 3;
+    static final double FORWARD_SPEED = 0.4;
+    static final double STRAFE_SPEED = 0.4;
+    static final double TURN_SPEED = 0.4;
+
     /*
      * These four variables store the power we need to apply to the motors. In other cases, we may
      * choose to declare these variables inside the mecanumDrive() function, instead we declare them
@@ -76,10 +80,6 @@ public abstract class AutonomousFunctions extends LinearOpMode {
 
     protected ElapsedTime runtime = new ElapsedTime();
 
-
-    static final double FORWARD_SPEED = 0.4;
-    static final double STRAFE_SPEED = 0.4;
-    static final double TURN_SPEED = 0.4;
 
     protected void initialize_hardware() {
 
